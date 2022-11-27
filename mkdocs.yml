@@ -1,0 +1,60 @@
+# Project Information
+site_name: llvm wiki
+site_description: OI Wiki 是一个编程竞赛知识整合站点，提供有趣又实用的编程竞赛知识以及其他有帮助的内容，帮助广大编程竞赛爱好者更快更深入地学习编程竞赛
+site_author: llvm wiki Team
+site_url: https://llvm.wiki
+strict: false
+
+# Repository
+repo_name: 'llvm-wiki/llvm-wiki'
+repo_url: 'https://github.com/llvm-wiki/llvm-wiki'
+edit_uri: 'https://llvm.wiki/edit-landing/?ref='
+
+# Copyright
+copyright: 'Copyright &copy; 2016 - 2022 llvm wiki team'
+
+plugins:
+  - search
+  - i18n:
+      languages:
+        en: "English"
+        zh: "简体中文"
+      default_language: 'en'
+      no_translation:
+        en: "This page isn't translated to English."
+        zh: "这个页面还没有被翻译为简体中文"
+      translate_nav:
+        en:
+          section title: "Section"
+          subsection: "Subsection"
+          page title: "Page with title translated"
+        zh:
+          section title: "节"
+          subsection: "小节"
+          page title: "标题被翻译过的页"
+      add_lang_links: False
+
+
+# Contents
+nav:
+  - index.md
+
+# Theme
+theme:
+  name: material
+  language: 'en'
+  font:
+    text: 'Fira Sans'
+    code: 'Fira Mono'
+
+extra:
+  # Default mkdocs-material alternate links for untranslated pages
+  # https://squidfunk.github.io/mkdocs-material/setup/changing-the-language/#site-language-selector
+  alternate:
+    - name: English
+      link: ""
+      lang: en
+
+    - name: 简体中文
+      link: index.zh/
+      lang: zh
