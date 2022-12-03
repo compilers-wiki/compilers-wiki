@@ -1,7 +1,7 @@
 # Project Information
-site_name: llvm wiki
-site_description: The llvm wiki provides wiki documentation on reusable compilation techniques
-site_author: llvm wiki Team
+site_name: LLVM Wiki
+site_description: The LLVM Wiki provides wiki documentation on reusable compilation techniques
+site_author: LLVM Wiki Team
 site_url: https://llvm.wiki
 strict: false
 
@@ -11,7 +11,7 @@ repo_url: 'https://github.com/llvm-wiki/llvm-wiki'
 edit_uri: 'https://llvm.wiki/edit-landing/?ref='
 
 # Copyright
-copyright: 'Copyright &copy; 2016 - 2022 llvm wiki team'
+copyright: 'Copyright &copy; 2016 - 2022 LLVM Wiki team'
 
 plugins:
   - search
@@ -37,8 +37,8 @@ plugins:
 
 # Contents
 nav:
-  - index.md
-  - index.zh.md
+  - LLVM Wiki: index.md
+  - LLVM Wiki: index.zh.md
 
 # Theme
 theme:

@@ -1,3 +1,2 @@
-title: llvm-wiki
 
-# Welcome to llvm-wiki!
+# Welcome to the LLVM Wiki!
