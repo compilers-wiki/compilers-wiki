@@ -27,7 +27,7 @@ MLIR 项目中还包含了一些已经编写好的 "IR", 可供直接使用。�
     - 对 MLIR 的比较 "尖锐" 的意见
     - 其对编译器优化的分类令人眼前一亮：auto-tiling/auto-tensorize/auto-schedule
 - 一些关注 MLIR 的中文使用者，可以跟着 timeline 看看
-    - [hunterzju](https://www.zhihu.com/people/hunterzju-45): 主要关注
+    - [hunterzju](https://www.zhihu.com/people/hunterzju-45): 主要关注 CIRCT 项目, 写了一些 MLIR Toy Tutorial 的笔记和文档的翻译
     - [mackler](https://www.zhihu.com/people/mackler): 主要偏向 MLIR 在 AI 领域的工作，虽然 ta 可能更多的是关注广义的计算机体系和优化
     - [法斯特豪斯](https://www.zhihu.com/people/zhang-hong-bin-99): Buddy-mlir 项目的 "主持人", 基本上主页都是关于 MLIR 的信息
     - [MLIR 中国社区](https://www.zhihu.com/people/mlir-70): 顾名思义
