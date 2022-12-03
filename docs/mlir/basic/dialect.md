@@ -58,7 +58,7 @@ This part can refer to the official [Toy Tutorial](https://mlir.llvm.org/docs/Tu
 
 Currently, the MLIR official repository contains some built-in dialects and conversions between them. These dialects can be regarded as MLIR's "standard library". Depending on the degree of versatility and focus, they can be classified as follows:
 
-> Due to the rapid development of MLIR, the list of dialects below will not be guaranteed to be complete. For a complete list, please refer to the official documentation.
+> Due to the rapid development of MLIR, the list of dialects below will not be guaranteed to be complete. For a complete list, please refer to the [official documentation](https://mlir.llvm.org/docs/Dialects/).
 
 ### Common Dialects
 
@@ -80,7 +80,7 @@ There are also generic dialects, but may relatively be used less than the dialec
 
 ### LLVM Dialects
 
-Then there is a very specific dialect: `llvm`, the LLVM dialect. It's a dialect that maintains a one-to-one mapping with concepts in LLVM IR. It acts as the "lowest level" in most dialect-lowering pathes. Other dialects gradually lower to the LLVM dialect, and then translated into LLVM IR, and then have various optimizations of LLVM and the ability to translate to all backends of LLVM.
+Then there is a very specific dialect: `llvm`, the LLVM dialect. It's a dialect that maintains a one-to-one mapping with concepts in LLVM IR. It acts as the "lowest level" in most dialect-lowering paths. Other dialects gradually lower to the LLVM dialect, and then translated into LLVM IR, and then have various optimizations of LLVM and the ability to translate to all backends of LLVM.
 
 If you don't understand an operation in a dialect, while it provides a lowering pass, you can read the lowering pass to understand what it means. The whole process is similar to learning C from a C compiler. In this process, the LLVM dialect acts like an assembly language.
 
