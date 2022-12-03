@@ -4,16 +4,16 @@ Dialects are a crucial part of MLIR. It can be said that MLIR without various di
 
 As far as learning is concerned, the learning of dialects can be divided into two parts:
 
-- Learn how to construct your own dialect
+- Learn how to construct your dialect
 - Learn the meaning of various operations in the built-in dialect
 
 The former is like learning to build a building, and the latter is like visiting a "model house".
 
 ## Basic Concepts
 
-A dialect can basically completely define anything that belongs to it, like new operations, properties, and types. New operations in the dialect can define their own exclusive syntax format and output format. It is very reasonable and normal to see operations with unique text forms in the operations of different dialects.
+A dialect can completely define anything that belongs to it, like new operations, properties, and types. New operations in the dialect can define their exclusive syntax format and output format. It is very reasonable and normal to see operations with unique text forms in the operations of different dialects.
 
-Things from different dialects can coexist harmoniously in the same module/function. At the same time, dialect writers can provide passes that convert operations in other dialects to their own dialects, and can also write passes that convert operations in their own dialects to other dialects. These conversions can be complete, converting all operations in A dialect transfer all operations to B; or step by step, only transfer part of the operations in A to B, and then transfer the rest to C.
+Things from different dialects can coexist harmoniously in the same module/function. At the same time, dialect writers can provide passes that convert operations in other dialects to their dialects, and can also write passes that convert operations in their dialects to other dialects. These conversions can be completed, converting all operations in A dialect to B; or step by step, only converting certain operations in A to B, and converting the rest to C.
 
 Consider the following example:
 
@@ -46,7 +46,7 @@ func. func @main() {
 }
 ```
 
-After this example is written, various conversion passes can be used to gradually or directly convert operations in various dialects into operations in LLVM dialects, and then translate into LLVM IR to obtain executable files. It can be seen that each dialect is very free. So to read MLIR code text, it is not enough to only be familiar with the MLIR core framework. You must refer to the documentation of the dialect you want to use, and be familiar with the meaning and syntax of each operation in them, in order to read efficiently.
+After this example is written, various conversion passes can be used to gradually or directly convert operations in various dialects into operations in LLVM dialects, and then translate them into LLVM IR to obtain executable files. It can be seen that each dialect is very free. So to read MLIR code text, it is not enough to only be familiar with the MLIR core framework. You must refer to the documentation of the dialect you want to use, and be familiar with the meaning and syntax of each operation in them, to read efficiently.
 
 All dialects are equal, but some dialects are more equal, and they are the dialects that are shipped in the MLIR project repository. These dialects are widely used. Before learning other dialects, it is recommended to read the documentation of [some of the most commonly used built-in dialects] (#Common Dialects).
 
@@ -56,13 +56,13 @@ This part can refer to the official [Toy Tutorial](https://mlir.llvm.org/docs/Tu
 
 ## Learn the Built-in Dialect
 
-Currently the MLIR official repository contains some built-in dialects and conversions between them. These dialects can be regarded as MLIR's "standard library". Depending on the degree of versatility and focus, they can be classified as follows:
+Currently, the MLIR official repository contains some built-in dialects and conversions between them. These dialects can be regarded as MLIR's "standard library". Depending on the degree of versatility and focus, they can be classified as follows:
 
 > Due to the rapid development of MLIR, the list of dialects below will not be guaranteed to be complete. For a complete list, please refer to the official documentation.
 
 ### Common Dialects
 
-The following are very common dialects. Basically, any other built-in dialects will more or less use the operations in the above dialects. Learning them is an important part of understanding existing dialects:
+The following are very common dialects. Any other built-in dialects will more or less use the operations in the above dialects. Learning them is an important part of understanding existing dialects:
 
 - `builtin`: built-in dialect, contains some facilities that may be used in all dialects, and should theoretically be kept very small. It also contains type definitions for the basic types of each built-in dialect
 - `func`: function dialect, used to express function definition/function call
@@ -80,25 +80,25 @@ There are also some less common but common dialects:
 
 ### LLVM Dialects
 
-Then there is a very specific dialect: `llvm`, the LLVM dialect. It's basically a dialect that maintains a one-to-one mapping with concepts in LLVM IR. It acts as the "lowest level" for most dialect descents Dialect, other dialects gradually descend to the LLVM dialect, and then translate the LLVM dialect into LLVM IR, and then have various optimizations of LLVM and the ability to translate to all backends of LLVM.
+Then there is a very specific dialect: `llvm`, the LLVM dialect. It's a dialect that maintains a one-to-one mapping with concepts in LLVM IR. It acts as the "lowest level" in most dialect-lowering pathes. Other dialects gradually lower to the LLVM dialect, and then translated into LLVM IR, and then have various optimizations of LLVM and the ability to translate to all backends of LLVM.
 
-If you don't understand the operation in any dialect, and it also provides a lowering pass, you can read the lowering pass to understand what it means. The whole process is similar to learning C language from a C language compiler. In this process, the LLVM dialect acts like an assembly language.
+If you don't understand an operation in a dialect, while it provides a lowering pass, you can read the lowering pass to understand what it means. The whole process is similar to learning C from a C compiler. In this process, the LLVM dialect acts like an assembly language.
 
-### Domain Specific Dialects
+### Domain-Specific Dialects
 
-Then there are some domain-specific dialects, most of which appear to effectively express information highly related to a certain domain at an abstract high level, so an understanding of specific domains will play a great role in understanding the following built-in dialects help. They are:
+There are some domain-specific dialects, most of which are designed to effectively express information highly related to a certain domain at a very high level of abstraction. So an understanding of specific domains will play a great role in understanding the following dialects. They are:
 
-- `vector`: a vectorized dialect, designed to express information about various SIMD operations in a platform-independent manner
+- `vector`: dialect for auto-vectorization, designed to express information about various SIMD operations in a platform-independent manner
 - `linalg`: high-level abstraction related to deep learning model representation
-- `spirv`: support for [SPIR-V](https://registry.khronos.org/SPIR-V/), a dialect for expressing graphics domain concepts such as graphics shaders
+- `spirv`: support for [SPIR-V](https://registry.khronos.org/SPIR-V/), a dialect for expressing graphics concepts such as shaders
 - `omp`: support for [OpenMP](https://www.openmp.org/) for expressing automatic multithreading related concepts
-- `gpu`: GPU dialect designed to express information about operations on the GPU platform-independently
+- `gpu`: GPU dialect designed to express platform-independently operations on the GPU
 - `async`: dialect for expressing asynchronous operations
-- `pdl`, `pdl_interp`: MLIR dialect used to express MLIR transformation, convenient to use MLIR pass to analyze MLIR pass :D
+- `pdl`, `pdl_interp`: MLIR dialect for MLIR transformation, making it possible to use MLIR pass to analyze MLIR pass
 
 ### Platform-dependent Dialects
 
-Among the built-in dialects, there are also many dialects for underlying optimization. They are designed to describe the characteristics of a certain CPU or instruction set in detail and guide the underlying optimization. Their names are relatively intuitive:
+Among the above dialects, there are also some dialects for platform-specific optimization. They are designed to describe the characteristics of a certain CPU or instruction set in detail and guide the optimization. Their names are relatively intuitive:
 
 - GPU:
     - `amdgpu`
