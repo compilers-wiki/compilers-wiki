@@ -38,6 +38,7 @@ plugins:
 # Contents
 nav:
   - index.md
+  - index.zh.md
 
 # Theme
 theme:
