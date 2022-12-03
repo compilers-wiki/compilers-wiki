@@ -47,6 +47,14 @@ theme:
   font:
     text: 'Fira Sans'
     code: 'Fira Mono'
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - search.suggest
+    - search.highlight
+    - search.share
+  palette:
+    primary: white
 
 extra:
   # Default mkdocs-material alternate links for untranslated pages
