@@ -28,10 +28,18 @@ plugins:
           section title: "Section"
           subsection: "Subsection"
           page title: "Page with title translated"
+
+          mlir-basic-concept: MLIR Basic Concept
+          mlir-dialect: Dialect
+          mlir-overview: Overview
         zh:
           section title: "节"
           subsection: "小节"
           page title: "标题被翻译过的页"
+
+          mlir-basic-concept: 基本概念
+          mlir-dialect: 方言
+          mlir-overview: 概述
       add_lang_links: False
 
 
@@ -39,6 +47,12 @@ plugins:
 nav:
   - LLVM Wiki: index.md
   - LLVM Wiki: index.zh.md
+  - MLIR:
+    - mlir-overview: mlir/mlir.md
+    - mlir-overview: mlir/mlir.zh.md
+    - mlir-basic-concept:
+      - mlir-dialect: mlir/basic/dialect.md
+      - mlir-dialect: mlir/basic/dialect.zh.md
 
 # Theme
 theme:
