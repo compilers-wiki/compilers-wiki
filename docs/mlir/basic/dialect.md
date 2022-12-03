@@ -62,7 +62,7 @@ Currently, the MLIR official repository contains some built-in dialects and conv
 
 ### Common Dialects
 
-The following are very common dialects. Any other built-in dialects will more or less use the operations in the above dialects. Learning them is an important part of understanding existing dialects:
+The following are very generic dialects. Any other built-in dialects will more or less use the operations in the above dialects. Learning them is an important part of understanding existing dialects:
 
 - `builtin`: built-in dialect, contains some facilities that may be used in all dialects, and should theoretically be kept very small. It also contains type definitions for the basic types of each built-in dialect
 - `func`: function dialect, used to express function definition/function call
@@ -70,7 +70,7 @@ The following are very common dialects. Any other built-in dialects will more or
 - `affine`: affine transformation dialect, which is a high-level description of index space/address space mapping
 - `memref`: memory area dialect, which is a high-level abstraction of memory and various operations on it
 
-There are also some less common but common dialects:
+There are also generic dialects, but may relatively be used less than the dialects above:
 
 - `cf`: Express unstructured control flow, such as goto and the like
 - `scf`: express structured control flow, such as for/while/if
