@@ -11,7 +11,7 @@ repo_url: 'https://github.com/llvm-wiki/llvm-wiki'
 edit_uri: 'https://llvm.wiki/edit-landing/?ref='
 
 # Copyright
-copyright: 'Copyright &copy; 2016 - 2022 LLVM Wiki team'
+copyright: 'Copyright &copy; 2022 LLVM Wiki team'
 
 plugins:
   - search
