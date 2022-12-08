@@ -35,6 +35,7 @@ plugins:
 
           llvm-pass-overview: Overview
           llvm-pass-hello-world: Hello World
+          llvm-alias-analysis: Alias Analysis Infrastructure
         zh:
           section title: "节"
           subsection: "小节"
@@ -46,6 +47,7 @@ plugins:
 
           llvm-pass-overview: 概述
           llvm-pass-hello-world: Hello World
+          llvm-alias-analysis: 别名分析
       add_lang_links: False
 
 
@@ -53,6 +55,9 @@ plugins:
 nav:
   - LLVM Wiki: index.md
   - LLVM Wiki: index.zh.md
+  - LLVM:
+    - llvm-alias-analysis: llvm/alias-analysis.md
+    - llvm-alias-analysis: llvm/alias-analysis.zh.md
   - MLIR:
     - mlir-overview: mlir/mlir.md
     - mlir-overview: mlir/mlir.zh.md
