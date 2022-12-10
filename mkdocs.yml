@@ -59,7 +59,7 @@ theme:
   name: material
   language: 'en'
   font:
-    text: 'Fira Sans'
+    text: 'Lato'
     code: 'Fira Mono'
   features:
     - navigation.tabs
