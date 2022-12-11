@@ -72,9 +72,10 @@ PreservedAnalyses HelloPass::run(Function &F, FunctionAnalysisManager &AM) {
 
 是的！这就是（几乎）全部为了实现一个简单的 pass 您需要编写的代码。让我们将这段代码进一步分解并看看它是如何工作的。
 
-为了使用 C++ 创建一个 pass，您需要编写一个实现了 pass 所需要的软件接口的类。传统的做法是从某个基类派生出来一个类并重写某些虚函数以实现接口，但新的 pass 管理器并没有采用这种方法，而是采用了一种被称为 _基于概念的多态_（Concept-Based Polymorphism）[^concepts-based-polymorphism]的方法。**只要这个类包含一个名为 `run` 的方法使之可以在一段 IR 上执行，那么这个类就表示一个 pass。**不需要从某个基类派生出子类来表示一个 pass。在上面的代码中，我们的 `HelloPass` 类继承自 `PassInfoMixin` 类，这个基类向 `HelloPass` 提供的接口中又额外添加了一些通用的代码。但真正重要的部分是 `run` 函数，正是 `run` 函数的存在使得 `HelloPass` 表示一个 pass。
+为了使用 C++ 创建一个 pass，您需要编写一个实现了 pass 所需要的软件接口的类。传统的做法是从某个基类派生出来一个类并重写某些虚函数以实现接口，但新的 pass 管理器并没有采用这种方法，而是采用了一种被称为 _基于概念的多态_（Concept-Based Polymorphism）[^concepts-based-polymorphism1] [^concepts-based-polymorphism2]的方法。**只要这个类包含一个名为 `run` 的方法使之可以在一段 IR 上执行，那么这个类就表示一个 pass。**不需要从某个基类派生出子类来表示一个 pass。在上面的代码中，我们的 `HelloPass` 类继承自 `PassInfoMixin` 类，这个基类向 `HelloPass` 提供的接口中又额外添加了一些通用的代码。但真正重要的部分是 `run` 函数，正是 `run` 函数的存在使得 `HelloPass` 表示一个 pass。
 
-[^concepts-based-polymorphism]: [这里](https://gist.github.com/GuillaumeDua/b0f5e3a40ce49468607dd62f7b7809b1)有一份对基于概念的多态的详细介绍和讨论文档。
+[^concepts-based-polymorphism1]: [这个注释](https://github.com/llvm/llvm-project/blob/main/llvm/include/llvm/IR/PassManager.h#L27-L33)简要介绍了 pass 框架中所使用的基于概念的多态机制。
+[^concepts-based-polymorphism2]: [这里](https://gist.github.com/GuillaumeDua/b0f5e3a40ce49468607dd62f7b7809b1)有一份对基于概念的多态的详细介绍和讨论文档。
 
 `run` 函数接收两个参数。第一个参数 `F` 是一个 IR 函数，新的 pass 将在这个函数上运行。注意 `F` 是通过一个非常量引用传递进来的，这说明我们可以修改这个函数（也就是对这个函数中包含的 IR 进行修改和变换）。第二个参数 `AM` 是一个 pass 管理器的实例；通过这个实例，新的 pass 可以访问各种分析 pass 并获得函数级别的分析信息。
 
