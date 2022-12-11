@@ -4,7 +4,10 @@ In this section, we guide you through writing and running a simple pass that pri
 
 ## Setup the Build
 
-Let's assume that you have cloned the LLVM monorepo and setup the build directory at `build/`, and the current working directory is the root of the monorepo. In this section, we will build the new pass in-tree, which means that the source tree of the new pass is directly embedded in the source tree of the LLVM monorepo.
+Let's assume that you have cloned the [LLVM monorepo] and setup the build directory at `build/` [^how2build], and the current working directory is the root of the monorepo. In this section, we will build the new pass in-tree, which means that the source tree of the new pass is directly embedded in the source tree of the LLVM monorepo.
+
+[LLVM monorepo]: https://github.com/llvm/llvm-project
+[^how2build]: For instructions on how to build LLVM from source, please refer to the [official documentation](https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm).
 
 Create a `Hello.h` file under `llvm/include/llvm/Transforms/Utils/`:
 
@@ -69,7 +72,9 @@ PreservedAnalyses HelloPass::run(Function &F, FunctionAnalysisManager &AM) {
 
 Yes! This is (almost) all you need to write a simple but working pass. Let's break the code into pieces and see how it's working.
 
-To create a pass in C++, you need to write a class that implements the software interface of a pass. Unlike traditional approaches which rely on class inheritance, the new pass manager uses _concepts-based polymorphism_. **As long as the class contains a `run` method that allows it to run on some piece of IR, it is a pass**. No need to inherit the class from some base class and override some virtual functions. In the code above, our `HelloPass` class inherits from the `PassInfoMixin` class, which adds some boilerplate code to the pass. But the most important part is the `run` method that makes `HelloPass` a pass.
+To create a pass in C++, you need to write a class that implements the software interface of a pass. Unlike traditional approaches which rely on class inheritance, the new pass manager uses _concepts-based polymorphism_ [^concepts-based-polymorphism]. **As long as the class contains a `run` method that allows it to run on some piece of IR, it is a pass**. No need to inherit the class from some base class and override some virtual functions. In the code above, our `HelloPass` class inherits from the `PassInfoMixin` class, which adds some boilerplate code to the pass. But the most important part is the `run` method that makes `HelloPass` a pass.
+
+[^concepts-based-polymorphism]: For a detailed introduction and discussion about concepts-based polymorphism, please refer to [here](https://gist.github.com/GuillaumeDua/b0f5e3a40ce49468607dd62f7b7809b1).
 
 The `run` method takes two parameters. The first parameter `F` is the IR function that the pass is running on. Note that `F` is passed via a non-const reference, indicating that we can modify the function (i.e. perform transformations) in the pass. The second parameter `AM` is a pass manager instance that links to analysis passes and provides function-level analysis information.
 
@@ -81,7 +86,7 @@ The `run` method returns a `PreservedAnalyses` object. This object contains info
 
 We have finished implementing the simple pass but we havn't told LLVM pass manager about the existance of our new pass. We need to _register_ our new pass into the pass manager.
 
-Edit `llvm/lib/Passes/PassRegistry.def` and add the following line to it:
+Edit `llvm/lib/Passes/PassRegistry.def` and add the following lines to it:
 
 ```cpp
 FUNCTION_PASS("hello", HelloPass())
@@ -120,7 +125,7 @@ build/bin/opt -disable-output test.ll -passes=hello
 
 The `-passes=hello` option make `opt` run `HelloPass`.
 
-It should output:
+Expected output:
 
 ```
 foo
