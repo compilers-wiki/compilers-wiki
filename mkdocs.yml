@@ -32,6 +32,9 @@ plugins:
           mlir-basic-concept: MLIR Basic Concept
           mlir-dialect: Dialect
           mlir-overview: Overview
+
+          llvm-pass-overview: Overview
+          llvm-pass-hello-world: Hello World
         zh:
           section title: "节"
           subsection: "小节"
@@ -40,6 +43,9 @@ plugins:
           mlir-basic-concept: 基本概念
           mlir-dialect: 方言
           mlir-overview: 概述
+
+          llvm-pass-overview: 概述
+          llvm-pass-hello-world: Hello World
       add_lang_links: False
 
 
@@ -53,6 +59,12 @@ nav:
     - mlir-basic-concept:
       - mlir-dialect: mlir/basic/dialect.md
       - mlir-dialect: mlir/basic/dialect.zh.md
+  - LLVM:
+    - Pass:
+      - llvm-pass-overview: llvm/pass/index.md
+      - llvm-pass-overview: llvm/pass/index.zh.md
+      - llvm-pass-hello-world: llvm/pass/hello-world.md
+      - llvm-pass-hello-world: llvm/pass/hello-world.zh.md
 
 # Theme
 theme:
