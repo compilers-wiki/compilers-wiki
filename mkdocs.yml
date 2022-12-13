@@ -55,9 +55,6 @@ plugins:
 nav:
   - LLVM Wiki: index.md
   - LLVM Wiki: index.zh.md
-  - LLVM:
-    - llvm-alias-analysis: llvm/alias-analysis.md
-    - llvm-alias-analysis: llvm/alias-analysis.zh.md
   - MLIR:
     - mlir-overview: mlir/mlir.md
     - mlir-overview: mlir/mlir.zh.md
@@ -70,6 +67,8 @@ nav:
       - llvm-pass-overview: llvm/pass/index.zh.md
       - llvm-pass-hello-world: llvm/pass/hello-world.md
       - llvm-pass-hello-world: llvm/pass/hello-world.zh.md
+    - llvm-alias-analysis: llvm/alias-analysis.md
+    - llvm-alias-analysis: llvm/alias-analysis.zh.md
 
 # Theme
 theme:

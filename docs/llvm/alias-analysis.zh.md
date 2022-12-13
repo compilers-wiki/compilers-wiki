@@ -100,29 +100,40 @@ for (i = 0; i != 10; ++i) {
 
 ### 其他实用的 `AliasAnalysis` 方法
 
-Several other tidbits of information are often collected by various alias analysis implementations and can be put to good use by various clients.
+其他一些信息通常由各种别名分析实现收集，可以被各种客户端很好地利用。
 
-#### The `getModRefInfoMask` method
 
-The `getModRefInfoMask` method returns a bound on Mod/Ref information for the supplied pointer, based on knowledge about whether the pointer points to globally-constant memory (for which it returns `NoModRef`) or locally-invariant memory (for which it returns `Ref`). Globally-constant memory includes functions, constant global variables, and the null pointer. Locally-invariant memory is memory that we know is invariant for the lifetime of its SSA value, but not necessarily for the life of the program: for example, the memory pointed to by `readonly` `noalias` parameters is known-invariant for the duration of the corresponding function call. Given Mod/Ref information `MRI` for a memory location `Loc`, `MRI` can be refined with a statement like `MRI &= AA.getModRefInfoMask(Loc);`. Another useful idiom is `isModSet(AA.getModRefInfoMask(Loc))`; this checks to see if the given location can be modified at all. For convenience, there is also a method `pointsToConstantMemory(Loc)`; this is synonymous with `isNoModRef(AA.getModRefInfoMask(Loc))`.
+#### `getModRefInfoMask` 方法
 
-#### The `doesNotAccessMemory` and `onlyReadsMemory` methods {#never access memory or only read memory}
+`getModRefInfoMask` 方法基于关于指针是指向全局不变内存 （globally-constant，返回`NoModRef`）还是局部不变内存（locally-invariant） 它返回 `Ref`）返回所提供指针的 Mod/Ref 信息的**界限**。 全局常量内存包括函数、常量全局变量和空指针。 局部不变内存是我们知道在其 SSA 值的生命周期内不变的内存，但不一定在程序的生命周期内不变。例如，`readonly` `noalias` 参数对应的内存，在函数调用时是已知的不变量。 
 
-These methods are used to provide very simple mod/ref information for function calls. The `doesNotAccessMemory` method returns true for a function if the analysis can prove that the function never reads or writes to memory, or if the function only reads from constant memory. Functions with this property are side-effect free and only depend on their input arguments, allowing them to be eliminated if they form common subexpressions or be hoisted out of loops. Many common functions behave this way (e.g., `sin` and `cos`) but many others do not (e.g., `acos`, which modifies the `errno` variable).
+给定内存位置 `Loc` 的 Mod/Ref 信息 `MRI`，可以使用 `MRI &= AA.getModRefInfoMas(Loc);`等语句对`MRI`进行细化。 另一个比较常见的用法是 `isModSet(AA.getModRefInfoMask(Loc))` 可以用来检查是否可以修改给定位置。 为了方便起见，还有一个方法 `pointsToConstantMemory(Loc)` 与 `isNoModRef(AA.getModRefInfoMask(Loc))` 同义。
 
-The `onlyReadsMemory` method returns true for a function if analysis can prove that (at most) the function only reads from non-volatile memory. Functions with this property are side-effect free, only depending on their input arguments and the state of memory when they are called. This property allows calls to these functions to be eliminated and moved around, as long as there is no store instruction that changes the contents of memory. Note that all functions that satisfy the `doesNotAccessMemory` method also satisfy `onlyReadsMemory`.
+#### `doesNotAccessMemory` 和 `onlyReadsMemory`
 
-## Writing a new `AliasAnalysis` Implementation
+这些方法用于为函数调用提供非常简单的 mod/ref 信息。 如果分析可以证明函数从不读取或写入内存，或者函数仅从常量内存读取，则 `doesNotAccessMemory` 方法会为函数返回 true。 具有此属性的函数没有副作用，仅依赖于它们的输入参数，如果它们形成公共子表达式或被提升到循环之外，则允许它们被消除。 许多常见函数是这种类型（例如，`sin` 和 `cos`）， 也很有一部分函数不是（例如，修改 `errno` 变量的 `acos`）。
 
-Writing a new alias analysis implementation for LLVM is quite straight-forward. There are already several implementations that you can use for examples, and the following information should help fill in any details. For a examples, take a look at the [various alias analysis implementations](#various alias analysis implementations) included with LLVM.
+如果分析可以证明（至多）该函数仅从标记为非 `volatile` 的内存中读取，则 `onlyReadsMemory` 方法会为该函数返回 `true` 。 具有此属性的函数没有副作用，仅取决于它们的输入参数和调用时的内存状态。 因为没有更改内存内容的存储指令，这一性质可以消除和移动对这些函数的调用。 
 
-### Different Pass styles
+???+note "Note"
+    所有满足 `doesNotAccessMemory` 方法的函数也满足 `onlyReadsMemory`。
 
-The first step to determining what type of `LLVM pass <WritingAnLLVMPass>`{.interpreted-text role="doc"} you need to use for your Alias Analysis. As is the case with most other analyses and transformations, the answer should be fairly obvious from what type of problem you are trying to solve:
+## 实现一个新的别名分析算法
 
-1. If you require interprocedural analysis, it should be a `Pass`.
-2. If you are a function-local analysis, subclass `FunctionPass`.
-3. If you don't need to look at the program at all, subclass `ImmutablePass`.
+为 LLVM 编写新的别名分析实现非常简单。 目前，仓库中已经有几个实现可以用作示例参考[^aa-example]。后文提到的信息可以帮助你完成一些细节问题。 
+
+[^aa-example]: \ https://llvm.org/docs/AliasAnalysis.html#various-alias-analysis-implementations
+
+### 不同风格的 Pass
+
+第一步是确定要使用那种类型的 [LLVM Pass](/llvm/pass/index.zh/) 。与大多数其他分析和转换的情况一样，您要解决的问题类型来看，答案应该是比较明显的：
+
+| 需求 | 选用的 Pass 类型 |
+| :---: | :---: |
+| 跨过程分析 | Pass |
+| 函数内部的分析 | FunctionPass |
+| 仅仅提供信息，不需要运行 | ImmutablePass |
+
 
 In addition to the pass that you subclass, you should also inherit from the `AliasAnalysis` interface, of course, and use the `RegisterAnalysisGroup` template to register as an implementation of `AliasAnalysis`.
 
