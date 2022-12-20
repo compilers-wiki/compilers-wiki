@@ -33,6 +33,7 @@ plugins:
           mlir-dialect: Dialect
           mlir-overview: Overview
 
+          llvm-overview: Overview
           llvm-pass-overview: Overview
           llvm-pass-hello-world: Hello World
         zh:
@@ -44,6 +45,7 @@ plugins:
           mlir-dialect: 方言
           mlir-overview: 概述
 
+          llvm-overview: 概述
           llvm-pass-overview: 概述
           llvm-pass-hello-world: Hello World
       add_lang_links: False
@@ -60,6 +62,8 @@ nav:
       - mlir-dialect: mlir/basic/dialect.md
       - mlir-dialect: mlir/basic/dialect.zh.md
   - LLVM:
+    - llvm-overview: llvm/overview/index.md
+    - llvm-overview: llvm/overview/index.zh.md
     - Pass:
       - llvm-pass-overview: llvm/pass/index.md
       - llvm-pass-overview: llvm/pass/index.zh.md
