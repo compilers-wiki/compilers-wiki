@@ -130,25 +130,34 @@ for (i = 0; i != 10; ++i) {
 
 | 需求 | 选用的 Pass 类型 |
 | :---: | :---: |
-| 跨过程分析 | Pass |
-| 函数内部的分析 | FunctionPass |
-| 仅仅提供信息，不需要运行 | ImmutablePass |
+| 跨过程分析 | `Pass` |
+| 函数内部的分析 | `FunctionPass` |
+| 仅仅提供信息，不需要运行 | `ImmutablePass` |
 
 
-In addition to the pass that you subclass, you should also inherit from the `AliasAnalysis` interface, of course, and use the `RegisterAnalysisGroup` template to register as an implementation of `AliasAnalysis`.
+你还应该继承 `AliasAnalysis` 接口，并且用 `RegisterAnalysisGroup` 模板，将 Pass 注册为 `AliasAnalysis` 的一个实现。
 
-### Required initialization calls
 
-Your subclass of `AliasAnalysis` is required to invoke two methods on the `AliasAnalysis` base class: `getAnalysisUsage` and `InitializeAliasAnalysis`. In particular, your implementation of `getAnalysisUsage` should explicitly call into the `AliasAnalysis::getAnalysisUsage` method in addition to doing any declaring any pass dependencies your pass has. Thus you should have something like this:
+### 必要的初始化调用
+
+你的 `AliasAnalysis` 的子类必须调用 `AliasAnalysis` 基类的两个方法。`getAnalysisUsage`和 `InitializeAliasAnalysis` 。特别是，你的 `getAnalysisUsage` 的实现应该明确地调用到 `AliasAnalysis::getAnalysisUsage` 方法，并且声明你的 pass 的依赖。代码大概是：
 
 ``` c++
 void getAnalysisUsage(AnalysisUsage &AU) const {
   AliasAnalysis::getAnalysisUsage(AU);
-  // declare your dependencies here.
+  // 声明所依赖的 Pass
 }
 ```
 
-Additionally, your must invoke the `InitializeAliasAnalysis` method from your analysis run method (`run` for a `Pass`, `runOnFunction` for a `FunctionPass`, or `InitializePass` for an `ImmutablePass`). For example (as part of a `Pass`):
+此外，必须在 `run` 方法中调用 `InitializeAliasAnalysis`。例如（作为`Pass`的一部分）。
+
+???+note "Pass 类型和对应的 “`run` 方法”"
+    | Pass 类型 | `run` 方法 |
+    | :----: | :----: |
+    | `Pass` | `run` |
+    | `FunctionPass` | `runOnFunction` |
+    | `InitializePass` | `ImmutablePass` |
+
 
 ``` c++
 bool run(Module &M) {
@@ -158,9 +167,9 @@ bool run(Module &M) {
 }
 ```
 
-### Required methods to override
+### 必须重载的方法
 
-You must override the `getAdjustedAnalysisPointer` method on all subclasses of `AliasAnalysis`. An example implementation of this method would look like:
+必须在子类重载 `getAdjustedAnalysisPointer` ， 例如：
 
 ``` c++
 void *getAdjustedAnalysisPointer(const void* ID) override {
