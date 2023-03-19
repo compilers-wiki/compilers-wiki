@@ -1,4 +1,4 @@
-# LLVM Wiki
+# Compilers Wiki
 
 ## 为什么要有这些文档
 
@@ -11,11 +11,11 @@
 首先 clone 这个仓库，你可能需要一个 shallow clone 来加快 clone 的速度，传入 `--depth=1`。
 
 ```sh
-git clone --depth=1 https://github.com/llvm-wiki/llvm-wiki.git
+git clone --depth=1 https://github.com/compilers-wiki/compilers-wiki.git
 ```
 
 ```sh
-cd llvm-wiki
+cd compilers-wiki
 ```
 
 安装相关依赖

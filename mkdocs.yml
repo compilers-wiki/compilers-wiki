@@ -1,17 +1,17 @@
 # Project Information
-site_name: LLVM Wiki
-site_description: The LLVM Wiki provides wiki documentation on reusable compilation techniques
-site_author: LLVM Wiki Team
-site_url: https://llvm.wiki
+site_name: Compilers Wiki
+site_description: The Compilers Wiki provides wiki documentation on reusable compilation techniques
+site_author: Compilers Wiki Team
+site_url: https://compilers.wiki
 strict: false
 
 # Repository
-repo_name: 'llvm-wiki/llvm-wiki'
-repo_url: 'https://github.com/llvm-wiki/llvm-wiki'
-edit_uri: 'https://llvm.wiki/edit-landing/?ref='
+repo_name: 'compilers-wiki/compilers-wiki'
+repo_url: 'https://github.com/compilers-wiki/compilers-wiki'
+edit_uri: 'https://compilers.wiki/edit-landing/?ref='
 
 # Copyright
-copyright: 'Copyright &copy; 2022 LLVM Wiki team'
+copyright: 'Copyright &copy; 2022 Compilers Wiki team'
 
 plugins:
   - search
@@ -53,8 +53,8 @@ plugins:
 
 # Contents
 nav:
-  - LLVM Wiki: index.md
-  - LLVM Wiki: index.zh.md
+  - Compilers Wiki: index.md
+  - Compilers Wiki: index.zh.md
   - MLIR:
     - mlir-overview: mlir/mlir.md
     - mlir-overview: mlir/mlir.zh.md

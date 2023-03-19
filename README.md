@@ -1,4 +1,4 @@
-# LLVM Wiki
+# Compilers Wiki
 
 ## Why?
 
@@ -12,11 +12,11 @@ Firstly clone our repo, you may need a shallow clone via `--depth=1`
 
 
 ```sh
-git clone --depth=1 https://github.com/llvm-wiki/llvm-wiki.git
+git clone --depth=1 https://github.com/compilers-wiki/compilers-wiki.git
 ```
 
 ```sh
-cd llvm-wiki
+cd compilers-wiki
 ```
 
 Install dependencies
