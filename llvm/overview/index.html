@@ -1,0 +1,1255 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The Compilers Wiki provides wiki documentation on reusable compilation techniques">
+      
+      
+        <meta name="author" content="Compilers Wiki Team">
+      
+      
+        <link rel="canonical" href="https://compilers.wiki/llvm/overview/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Overview - Compilers Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700,700i%7CFira+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Lato";--md-code-font:"Fira Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#getting-started" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Compilers Wiki" class="md-header__button md-logo" aria-label="Compilers Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Compilers Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+      <div class="md-header__option">
+        <div class="md-select">
+          
+          <button class="md-header__button md-icon" aria-label="Select language">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.52 17.52 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04M18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12m-2.62 7 1.62-4.33L19.12 17h-3.24Z"/></svg>
+          </button>
+          <div class="md-select__inner">
+            <ul class="md-select__list">
+              
+                <li class="md-select__item">
+                  <a href="./" hreflang="en" class="md-select__link">
+                    English
+                  </a>
+                </li>
+              
+                <li class="md-select__item">
+                  <a href="index.zh/" hreflang="zh" class="md-select__link">
+                    简体中文
+                  </a>
+                </li>
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/compilers-wiki/compilers-wiki" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    compilers-wiki/compilers-wiki
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-tabs__inner md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Compilers Wiki
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../mlir/mlir/" class="md-tabs__link">
+        MLIR
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="./" class="md-tabs__link md-tabs__link--active">
+        LLVM
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Compilers Wiki" class="md-nav__button md-logo" aria-label="Compilers Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Compilers Wiki
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/compilers-wiki/compilers-wiki" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    compilers-wiki/compilers-wiki
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Compilers Wiki
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          MLIR
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MLIR" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MLIR
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mlir/mlir/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" type="checkbox" id="__nav_2_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2">
+          MLIR Basic Concept
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="MLIR Basic Concept" data-md-level="2">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          MLIR Basic Concept
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mlir/basic/dialect/" class="md-nav__link">
+        Dialect
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3">
+          LLVM
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="LLVM" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          LLVM
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Overview
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-compiler" class="md-nav__link">
+    What is a compiler
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llvm" class="md-nav__link">
+    LLVM
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llvm-design-philosophy" class="md-nav__link">
+    LLVM design philosophy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-of-a-compiler-taking-clangllvm-as-an-example" class="md-nav__link">
+    Pipeline of a compiler (taking Clang/LLVM as an example)
+  </a>
+  
+    <nav class="md-nav" aria-label="Pipeline of a compiler (taking Clang/LLVM as an example)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lexing" class="md-nav__link">
+    Lexing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    Parsing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-code-generation" class="md-nav__link">
+    Intermediate code generation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-contribute-to-llvm" class="md-nav__link">
+    How to contribute to LLVM
+  </a>
+  
+    <nav class="md-nav" aria-label="How to contribute to LLVM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#submitting-new-bugs" class="md-nav__link">
+    Submitting new bugs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submit-a-patch" class="md-nav__link">
+    Submit a patch
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#communicating-with-the-community" class="md-nav__link">
+    Communicating with the community
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#related-links" class="md-nav__link">
+    Related links
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2">
+          Pass
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Pass" data-md-level="2">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Pass
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pass/" class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../pass/hello-world/" class="md-nav__link">
+        Hello World
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-compiler" class="md-nav__link">
+    What is a compiler
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llvm" class="md-nav__link">
+    LLVM
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llvm-design-philosophy" class="md-nav__link">
+    LLVM design philosophy
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pipeline-of-a-compiler-taking-clangllvm-as-an-example" class="md-nav__link">
+    Pipeline of a compiler (taking Clang/LLVM as an example)
+  </a>
+  
+    <nav class="md-nav" aria-label="Pipeline of a compiler (taking Clang/LLVM as an example)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lexing" class="md-nav__link">
+    Lexing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parsing" class="md-nav__link">
+    Parsing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-code-generation" class="md-nav__link">
+    Intermediate code generation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-contribute-to-llvm" class="md-nav__link">
+    How to contribute to LLVM
+  </a>
+  
+    <nav class="md-nav" aria-label="How to contribute to LLVM">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#submitting-new-bugs" class="md-nav__link">
+    Submitting new bugs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#submit-a-patch" class="md-nav__link">
+    Submit a patch
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#communicating-with-the-community" class="md-nav__link">
+    Communicating with the community
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#related-links" class="md-nav__link">
+    Related links
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://compilers.wiki/edit-landing/?ref=/llvm/overview/index.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link"></a></h1>
+<p>In this section, we will briefly describe the basics and concepts related to compilers and introduce the LLVM project.</p>
+<details class="note" open="open">
+<summary>Note</summary>
+<p>This section assumes that you do not have any background in compilers and that you already have an understanding of programming and can write simple C code.</p>
+</details>
+<h2 id="what-is-a-compiler">What is a compiler<a class="headerlink" href="#what-is-a-compiler" title="Permanent link"></a></h2>
+<p>Conceptually, a compiler is a <strong>computer program</strong> that converts a programming language into another language. What we usually call a compiler generally converts a higher-level programming language such as C, C++, Fortran, etc. into a lower-level assembly language or machine code.</p>
+<p><strong>Note that a compiler is not an editor, much less an IDE.</strong></p>
+<h2 id="llvm">LLVM<a class="headerlink" href="#llvm" title="Permanent link"></a></h2>
+<details class="note" open="open">
+<summary>Note</summary>
+<p>Note that LLVM as discussed here refers to all the subprojects contained in the LLVM monorepo, not to the LLVM core in the traditional sense.</p>
+</details>
+<p>LLVM is a set of <strong>reusable</strong> compiler toolchains. It currently contains at least the following subprojects.</p>
+<ul>
+<li>bolt</li>
+</ul>
+<p>A linked optimizer that optimizes the code layout of an application for improvements based on execution profiles collected by sampled profilers (such as the Linux perf tool).</p>
+<ul>
+<li>clang</li>
+</ul>
+<p>A GCC-compatible compiler front-end for the C family (C, C++, Objective C/C++, OpenCL, CUDA), known for its respectable compilation times and good diagnostic information.</p>
+<ul>
+<li>libcxx</li>
+</ul>
+<p>A new implementation of the C++ standard library, for C++11 and above.</p>
+<ul>
+<li>llvm</li>
+</ul>
+<p>The core of the LLVM project, including the LLVM intermediate language, various optimizations, and its corresponding command-line tools.</p>
+<ul>
+<li>mlir</li>
+</ul>
+<p>A general framework for writing various types of analysis and transformations in compilers and the intermediate representations they require.</p>
+<ul>
+<li>lld</li>
+</ul>
+<p>A high-performance, modular cross-platform linker.</p>
+<h2 id="llvm-design-philosophy">LLVM design philosophy<a class="headerlink" href="#llvm-design-philosophy" title="Permanent link"></a></h2>
+<p>LLVM is modular, and the most important aspect of LLVM is that it is designed as a set of libraries, not as a single command-line compiler like GCC or an opaque virtual machine like the JVM or .NET virtual machines.</p>
+<p>As an example, the LLVM optimizer provides a large number of <a href="../pass/">passes</a> that are compiled into one or more <code>.o</code> files and then built into a series of static or dynamic libraries. These libraries provide various parsing and transformation functions, and the passes are kept as independent as possible from each other, or if they depend on other parsing to do their job, their dependencies on other passes are explicitly declared. In contrast, during the actual optimization process of LLVM optimization, only the passes that are used are linked to the final application, not all of them.</p>
+<p>This straightforward design approach allows LLVM to provide a large number of features, some of which may be useful only to a specific audience, without affecting users of the library who just want to do other simple things. In contrast, traditional compiler optimizers are built as large amounts of interrelated code, making it difficult to split, reason about, and accelerate them. With LLVM, you can understand the individual optimizers without knowing how the whole system fits together.</p>
+<h2 id="pipeline-of-a-compiler-taking-clangllvm-as-an-example">Pipeline of a compiler (taking Clang/LLVM as an example)<a class="headerlink" href="#pipeline-of-a-compiler-taking-clangllvm-as-an-example" title="Permanent link"></a></h2>
+<p>Generally speaking, compilers are divided into front-end, middle-end and back-end.</p>
+<p>The front-end is responsible for analyzing and processing the source code and generating intermediate code.</p>
+<h3 id="lexing">Lexing<a class="headerlink" href="#lexing" title="Permanent link"></a></h3>
+<p>In this stage, the compiler divides the source code into tokens and ignores invalid information such as spaces and blank lines. Each token usually contains the following information.</p>
+<ul>
+<li>Type. Common types such as identifiers, keywords, separators, operators, literals, etc.</li>
+<li>Value. The value that this token actually corresponds to.</li>
+<li>Location in the source code. Recording the location of the token in the original code can help us generate better diagnostic information.</li>
+</ul>
+<p>As an example:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">foo</span><span class="p">(</span><span class="mi">24</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">24</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div>
+For the above code, Clang will generate the following token:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span></pre></div></td><td class="code"><div><pre><span></span><code>$ clang -c -Xclang -dump-tokens prog.c
+int <span class="s1">&#39;int&#39;</span>        <span class="o">[</span>StartOfLine<span class="o">]</span>  <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:1&gt;
+identifier <span class="s1">&#39;foo&#39;</span>         <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:5&gt;
+l_paren <span class="s1">&#39;(&#39;</span>             <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:8&gt;
+int <span class="s1">&#39;int&#39;</span>               <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:9&gt;
+identifier <span class="s1">&#39;i&#39;</span>   <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:13&gt;
+r_paren <span class="s1">&#39;)&#39;</span>             <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:14&gt;
+l_brace <span class="s1">&#39;{&#39;</span>      <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:16&gt;
+<span class="k">return</span> <span class="s1">&#39;return&#39;</span>  <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:18&gt;
+identifier <span class="s1">&#39;i&#39;</span>   <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:25&gt;
+plus <span class="s1">&#39;+&#39;</span>         <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:27&gt;
+numeric_constant <span class="s1">&#39;42&#39;</span>    <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:29&gt;
+semi <span class="s1">&#39;;&#39;</span>                <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:31&gt;
+r_brace <span class="s1">&#39;}&#39;</span>      <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:1:33&gt;
+int <span class="s1">&#39;int&#39;</span>        <span class="o">[</span>StartOfLine<span class="o">]</span>  <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:3:1&gt;
+identifier <span class="s1">&#39;main&#39;</span>        <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:3:5&gt;
+l_paren <span class="s1">&#39;(&#39;</span>             <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:3:9&gt;
+r_paren <span class="s1">&#39;)&#39;</span>             <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:3:10&gt;
+l_brace <span class="s1">&#39;{&#39;</span>      <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:3:12&gt;
+int <span class="s1">&#39;int&#39;</span>        <span class="o">[</span>StartOfLine<span class="o">]</span> <span class="o">[</span>LeadingSpace<span class="o">]</span>   <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:3&gt;
+identifier <span class="s1">&#39;x&#39;</span>   <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:7&gt;
+equal <span class="s1">&#39;=&#39;</span>        <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:9&gt;
+identifier <span class="s1">&#39;foo&#39;</span>         <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:11&gt;
+l_paren <span class="s1">&#39;(&#39;</span>             <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:14&gt;
+numeric_constant <span class="s1">&#39;24&#39;</span>           <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:15&gt;
+r_paren <span class="s1">&#39;)&#39;</span>             <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:17&gt;
+semi <span class="s1">&#39;;&#39;</span>                <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:4:18&gt;
+<span class="k">return</span> <span class="s1">&#39;return&#39;</span>  <span class="o">[</span>StartOfLine<span class="o">]</span> <span class="o">[</span>LeadingSpace<span class="o">]</span>   <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:5:3&gt;
+identifier <span class="s1">&#39;x&#39;</span>   <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:5:10&gt;
+minus <span class="s1">&#39;-&#39;</span>        <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:5:12&gt;
+numeric_constant <span class="s1">&#39;24&#39;</span>    <span class="o">[</span>LeadingSpace<span class="o">]</span> <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:5:14&gt;
+semi <span class="s1">&#39;;&#39;</span>                <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:5:16&gt;
+r_brace <span class="s1">&#39;}&#39;</span>      <span class="o">[</span>StartOfLine<span class="o">]</span>  <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:6:1&gt;
+eof <span class="s1">&#39;&#39;</span>          <span class="nv">Loc</span><span class="o">=</span>&lt;prog.c:6:2&gt;
+</code></pre></div></td></tr></table></div>
+<h3 id="parsing">Parsing<a class="headerlink" href="#parsing" title="Permanent link"></a></h3>
+<p>In this stage, the compiler converts the linear token stream into an Abstract Syntax Tree with specific syntax rules. The compiler also throws a diagnostic at this stage if there is an error in the syntax parsing.</p>
+<p>For the preceding code, the syntax tree generated by Clang can be viewed with the following command.
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code>$ clang -Xclang -ast-dump -fsyntax-only prog.c
+TranslationUnitDecl 0x820688 <span class="s">&lt;&lt;invalid sloc&gt;&gt; &lt;invalid</span> sloc&gt;
+<span class="p">|</span>-FunctionDecl 0x877270 &lt;prog.c:1:1, col:33&gt; col:5 used foo <span class="s1">&#39;int (int)&#39;</span>
+<span class="p">|</span> <span class="p">|</span>-ParmVarDecl 0x8771a0 &lt;col:9, col:13&gt; col:13 used i <span class="s1">&#39;int&#39;</span>
+<span class="p">|</span> <span class="sb">`</span>-CompoundStmt 0x8773e8 &lt;col:16, col:33&gt;
+<span class="p">|</span>   <span class="sb">`</span>-ReturnStmt 0x8773d8 &lt;col:18, col:29&gt;
+<span class="p">|</span>     <span class="sb">`</span>-BinaryOperator 0x8773b8 &lt;col:25, col:29&gt; <span class="s1">&#39;int&#39;</span> <span class="s1">&#39;+&#39;</span>
+<span class="p">|</span>       <span class="p">|</span>-ImplicitCastExpr 0x8773a0 &lt;col:25&gt; <span class="s1">&#39;int&#39;</span> &lt;LValueToRValue&gt;
+<span class="p">|</span>       <span class="p">|</span> <span class="sb">`</span>-DeclRefExpr 0x877360 &lt;col:25&gt; <span class="s1">&#39;int&#39;</span> lvalue ParmVar 0x8771a0 <span class="s1">&#39;i&#39;</span> <span class="s1">&#39;int&#39;</span>
+<span class="p">|</span>       <span class="sb">`</span>-IntegerLiteral 0x877380 &lt;col:29&gt; <span class="s1">&#39;int&#39;</span> <span class="m">42</span>
+<span class="sb">`</span>-FunctionDecl 0x877450 &lt;line:3:1, line:6:1&gt; line:3:5 main <span class="s1">&#39;int ()&#39;</span>
+  <span class="sb">`</span>-CompoundStmt 0x8776b8 &lt;col:12, line:6:1&gt;
+    <span class="p">|</span>-DeclStmt 0x877618 &lt;line:4:3, col:18&gt;
+    <span class="p">|</span> <span class="sb">`</span>-VarDecl 0x877508 &lt;col:3, col:17&gt; col:7 used x <span class="s1">&#39;int&#39;</span> cinit
+    <span class="p">|</span>   <span class="sb">`</span>-CallExpr 0x8775f0 &lt;col:11, col:17&gt; <span class="s1">&#39;int&#39;</span>
+    <span class="p">|</span>     <span class="p">|</span>-ImplicitCastExpr 0x8775d8 &lt;col:11&gt; <span class="s1">&#39;int (*)(int)&#39;</span> &lt;FunctionToPointerDecay&gt;
+    <span class="p">|</span>     <span class="p">|</span> <span class="sb">`</span>-DeclRefExpr 0x877570 &lt;col:11&gt; <span class="s1">&#39;int (int)&#39;</span> Function 0x877270 <span class="s1">&#39;foo&#39;</span> <span class="s1">&#39;int (int)&#39;</span>
+    <span class="p">|</span>     <span class="sb">`</span>-IntegerLiteral 0x877590 &lt;col:15&gt; <span class="s1">&#39;int&#39;</span> <span class="m">24</span>
+    <span class="sb">`</span>-ReturnStmt 0x8776a8 &lt;line:5:3, col:14&gt;
+      <span class="sb">`</span>-BinaryOperator 0x877688 &lt;col:10, col:14&gt; <span class="s1">&#39;int&#39;</span> <span class="s1">&#39;-&#39;</span>
+        <span class="p">|</span>-ImplicitCastExpr 0x877670 &lt;col:10&gt; <span class="s1">&#39;int&#39;</span> &lt;LValueToRValue&gt;
+        <span class="p">|</span> <span class="sb">`</span>-DeclRefExpr 0x877630 &lt;col:10&gt; <span class="s1">&#39;int&#39;</span> lvalue Var 0x877508 <span class="s1">&#39;x&#39;</span> <span class="s1">&#39;int&#39;</span>
+        <span class="sb">`</span>-IntegerLiteral 0x877650 &lt;col:14&gt; <span class="s1">&#39;int&#39;</span> <span class="m">24</span>
+</code></pre></div></td></tr></table></div></p>
+<h3 id="intermediate-code-generation">Intermediate code generation<a class="headerlink" href="#intermediate-code-generation" title="Permanent link"></a></h3>
+<p>At this stage, the compiler converts the abstract syntax tree into an intermediate language.</p>
+<p>As in the example above, Clang generates the following intermediate language (LLVM IR).
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c">; ModuleID = &#39;prog.c&#39;</span>
+<span class="k">source_filename</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;prog.c&quot;</span><span class="w"></span>
+<span class="k">target</span><span class="w"> </span><span class="k">datalayout</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128&quot;</span><span class="w"></span>
+<span class="k">target</span><span class="w"> </span><span class="k">triple</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;x86_64-pc-linux-gnu&quot;</span><span class="w"></span>
+
+<span class="c">; Function Attrs: noinline nounwind optnone</span>
+<span class="k">define</span><span class="w"> </span><span class="k">dso_local</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="vg">@foo</span><span class="p">(</span><span class="kt">i32</span><span class="w"> </span><span class="k">noundef</span><span class="w"> </span><span class="nv">%i</span><span class="p">)</span><span class="w"> </span><span class="vg">#0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="nl">entry:</span><span class="w"></span>
+<span class="w">  </span><span class="nv">%i.addr</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">alloca</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="k">store</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv">%i</span><span class="p">,</span><span class="w"> </span><span class="kt">i32</span><span class="p">*</span><span class="w"> </span><span class="nv">%i.addr</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="nv nv-Anonymous">%0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">load</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="kt">i32</span><span class="p">*</span><span class="w"> </span><span class="nv">%i.addr</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="nv">%add</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="k">nsw</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">,</span><span class="w"> </span><span class="m">42</span><span class="w"></span>
+<span class="w">  </span><span class="k">ret</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv">%add</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="c">; Function Attrs: noinline nounwind optnone</span>
+<span class="k">define</span><span class="w"> </span><span class="k">dso_local</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="vg">@main</span><span class="p">()</span><span class="w"> </span><span class="vg">#0</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="nl">entry:</span><span class="w"></span>
+<span class="w">  </span><span class="nv">%retval</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">alloca</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="nv">%x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">alloca</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="k">store</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="kt">i32</span><span class="p">*</span><span class="w"> </span><span class="nv">%retval</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="nv">%call</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="vg">@foo</span><span class="p">(</span><span class="kt">i32</span><span class="w"> </span><span class="k">noundef</span><span class="w"> </span><span class="m">24</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="k">store</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv">%call</span><span class="p">,</span><span class="w"> </span><span class="kt">i32</span><span class="p">*</span><span class="w"> </span><span class="nv">%x</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="nv nv-Anonymous">%0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">load</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="kt">i32</span><span class="p">*</span><span class="w"> </span><span class="nv">%x</span><span class="p">,</span><span class="w"> </span><span class="k">align</span><span class="w"> </span><span class="m">4</span><span class="w"></span>
+<span class="w">  </span><span class="nv">%sub</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">sub</span><span class="w"> </span><span class="k">nsw</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv nv-Anonymous">%0</span><span class="p">,</span><span class="w"> </span><span class="m">24</span><span class="w"></span>
+<span class="w">  </span><span class="k">ret</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv">%sub</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div></p>
+<p>The middle-end is mainly responsible for analyzing and optimizing on the intermediate code to generate a more efficient intermediate code. In addition to the generic optimizations, the middle-end also contains those platform-specific optimizations.</p>
+<p>The specific responsibilities of the middle-end include:</p>
+<ul>
+<li>Analysis of the intermediate language, such as data flow analysis, alias analysis, etc. This phase is the basis for other optimizations performed by the compiler.</li>
+<li>Optimizing the intermediate language to convert its representation into a functionally equivalent but faster (or smaller) form. Common optimizations such as inline expansion, dead code elimination, constant propagation, loop conversion, etc.</li>
+</ul>
+<p>For example, we have this LLVM IR:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="err">$</span><span class="w"> </span><span class="err">cat</span><span class="w"> </span><span class="err">prog</span><span class="p">.</span><span class="err">ll</span><span class="w"></span>
+<span class="k">define</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="vg">@test</span><span class="p">(</span><span class="err">ptr</span><span class="w"> </span><span class="nv">%Q</span><span class="p">,</span><span class="w"> </span><span class="err">ptr</span><span class="w"> </span><span class="nv">%P</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nv">%DEAD</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">load</span><span class="w"> </span><span class="kt">i32</span><span class="p">,</span><span class="w"> </span><span class="err">ptr</span><span class="w"> </span><span class="nv">%Q</span><span class="w"></span>
+<span class="w">  </span><span class="k">store</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="nv">%DEAD</span><span class="p">,</span><span class="w"> </span><span class="err">ptr</span><span class="w"> </span><span class="nv">%P</span><span class="w"></span>
+<span class="w">  </span><span class="k">store</span><span class="w"> </span><span class="kt">i32</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="err">ptr</span><span class="w"> </span><span class="nv">%P</span><span class="w"></span>
+<span class="w">  </span><span class="k">ret</span><span class="w"> </span><span class="k">void</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div></td></tr></table></div></p>
+<p>We can use the command line tools provided by LLVM to optimize it in any way we want. By working with the pipeline character on Unix systems, we can be very flexible in achieving various effects:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code>$ opt -passes<span class="o">=</span>dse prog.ll <span class="p">|</span> llvm-dis -f
+<span class="p">;</span> <span class="nv">ModuleID</span> <span class="o">=</span> <span class="s1">&#39;&lt;stdin&gt;&#39;</span>
+<span class="nv">source_filename</span> <span class="o">=</span> <span class="s2">&quot;prog.ll&quot;</span>
+
+define void @test<span class="o">(</span>ptr %Q, ptr %P<span class="o">)</span> <span class="o">{</span>
+  store i32 <span class="m">0</span>, ptr %P, align <span class="m">4</span>
+  ret void
+<span class="o">}</span>
+</code></pre></div></td></tr></table></div></p>
+<p>Here we use the <code>opt</code> utility provided by LLVM to apply a dead code elimination optimization to <code>prog.ll</code> alone. Since <code>opt</code> generates human-unreadable LLVM bytecode, we then use <code>llvm-dis</code> to convert it to LLVM IR.</p>
+<p>The backend needs to generate the intermediate code into machine code for the corresponding platform, as well as some CPU architecture details for optimization.</p>
+<h2 id="how-to-contribute-to-llvm">How to contribute to LLVM<a class="headerlink" href="#how-to-contribute-to-llvm" title="Permanent link"></a></h2>
+<h3 id="submitting-new-bugs">Submitting new bugs<a class="headerlink" href="#submitting-new-bugs" title="Permanent link"></a></h3>
+<p>For a long time LLVM has been using <a href="https://bugs.llvm.org/">Bugzilla</a> as its bug tracker, but has now moved to <a href="https://github.com/llvm/llvm-project/issues">Github issues</a>. You can find some easy-to-follow bugs by looking at <a href="https://github.com/llvm/llvm-project/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22">Good Frist Issue</a> in issue.</p>
+<h3 id="submit-a-patch">Submit a patch<a class="headerlink" href="#submit-a-patch" title="Permanent link"></a></h3>
+<details class="note" open="open">
+<summary>Note</summary>
+<p>Note that LLVM is interested in dropping Phabricator and moving to Github Pull Requests, as detailed in <sup id="fnref:Code Review Process Update"><a class="footnote-ref" href="#fn:Code Review Process Update">1</a></sup>.</p>
+</details>
+<p>Currently, the LLVM community still uses <a href="https://reviews.llvm.org/">Phabricator</a> to submit patches for code review. You can quickly sign up for a Phabricator account using a third-party account such as GitHub.</p>
+<p>You can submit your patches using the web page or Phabricator's own command line tool, arcanist. Specific documentation can be found <a href="https://llvm.org/docs/Phabricator.html#phabricator-reviews">here</a>. The following is a simple example of using arcanist.</p>
+<details class="note" open="open">
+<summary>Note</summary>
+<p>Here we assume that you are using a Unix-like operating system and have Git installed and configured</p>
+</details>
+<p>First we need to install arcanist:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>git clone https://github.com/phacility/arcanist.git
+</code></pre></div></td></tr></table></div></p>
+<p>Next, add it to the environment variables:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$PATH</span><span class="s2">:/path/to/arcanist/bin/&quot;</span>
+</code></pre></div></td></tr></table></div></p>
+<p>Authorize the login.
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>arc install-certificate
+</code></pre></div></td></tr></table></div></p>
+<p>When coding, we recommend using <code>amend</code> or manually <code>rebase</code> to compress our code into a <code>commit</code> for subsequent code review.</p>
+<p>Once our patch has been tested locally, it's ready to be sent out. But before doing so, we must be careful to ensure that our patch conforms to the LLVM Coding Style with clang-format.</p>
+<p>We recommend using the official <a href="https://github.com/llvm/llvm-project/blob/main/clang/tools/clang-format/git-clang-format">git-clang-format</a> tool provided by LLVM for best results and to avoid accidental changes to other code. You can add the path of git-clang-format to the PATH directly.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>git clang-format HEAD~1
+</code></pre></div></td></tr></table></div>
+<p>Note that the format doesn't commit automatically, so you need to.
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>git commit --amend -a
+</code></pre></div></td></tr></table></div></p>
+<p>After this is done, we can commit the patch to Phabricator using arc
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>arc diff
+</code></pre></div></td></tr></table></div>
+arcanist will upload the latest commit to Phabricator, and when it succeeds, it will give us a link to our Revision.</p>
+<p>After the reviewer has looked at the code, he may give us some suggestions for changes, and we can continue to use arcanist to update our patches:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>arc diff --update DXXXXX
+</code></pre></div></td></tr></table></div>
+where DXXXXX is our previous Revision, which we have to specify manually because arcanist doesn't know the context.</p>
+<h3 id="communicating-with-the-community">Communicating with the community<a class="headerlink" href="#communicating-with-the-community" title="Permanent link"></a></h3>
+<ul>
+<li>Mailing list</li>
+</ul>
+<p>Although the community has phased out mailing lists, we still recommend that you subscribe to the list of commit records for the corresponding subprojects, which helps to keep you informed of what is happening in the project. For example, if you want to contribute to Clang, you can subscribe to the list <a href="https://lists.llvm.org/mailman/listinfo/cfe-commits">cfe-commits</a>, and if you want to contribute to the LLVM core, you can subscribe to the list <a href="https://lists.llvm.org/mailman/listinfo/llvm-commits">llvm-commits</a>.</p>
+<ul>
+<li><a href="https://discourse.llvm.org/">Discourse</a></li>
+<li><a href="https://discord.com/invite/xS7Z362">Discord</a></li>
+</ul>
+<h3 id="related-links">Related links<a class="headerlink" href="#related-links" title="Permanent link"></a></h3>
+<ul>
+<li><a href="https://llvm.org/docs/GettingStarted.html">Getting Started with the LLVM System</a></li>
+<li><a href="https://www.aosabook.org/en/llvm.html">The Design Decisions of LLVM</a></li>
+<li><a href="https://llvm.org/docs/LangRef.html">LLVM Language Reference Manual</a></li>
+<li><a href="https://youtu.be/m8G_S5LwlTo">LLVM IR Tutorial - Phis, GEPs and other things, oh my!</a></li>
+<li><a href="https://youtu.be/J5xExRGaIIY">2019 LLVM Developers’ Meeting: E. Christopher &amp; J. Doerfert “Introduction to LLVM”</a></li>
+<li><a href="https://clang.llvm.org/docs/InternalsManual.html">“Clang” CFE Internals Manual</a></li>
+<li><a href="https://youtu.be/5kkMpJpIGYU">2019 LLVM Developers’ Meeting: S. Haastregt &amp; A. Stulova “An overview of Clang ”</a></li>
+<li><a href="https://youtu.be/E6i8jmiy8MY">P. Goldsborough “clang-useful: Building useful tools with LLVM and clang for fun and profit"</a></li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:Code Review Process Update">
+<p>You can refer to <a href="https://discourse.llvm.org/t/code-review-process-update/63964">this post</a> to know more.&#160;<a class="footnote-backref" href="#fnref:Code Review Process Update" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../../mlir/basic/dialect/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Dialect" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Dialect
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../pass/" class="md-footer__link md-footer__link--next" aria-label="Next: Overview" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Overview
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2022 Compilers Wiki team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "search.suggest", "search.highlight", "search.share"], "search": "../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>
